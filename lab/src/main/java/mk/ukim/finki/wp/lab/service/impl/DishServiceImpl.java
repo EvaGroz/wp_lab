@@ -25,4 +25,24 @@ public class DishServiceImpl implements DishService {
         return dishRepository.findByDishId(dishId);
                 //listDishes().stream().filter(dish -> dish.getDishId().equals(dishId)).findFirst().orElse(null);
     }
+
+    @Override
+    public Dish findById(Long id) {
+        return dishRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Dish create(String dishId, String name, String cuisine, int preparationTime) {
+        return dishRepository.save(new Dish(dishId, name, cuisine, preparationTime));
+    }
+
+    @Override
+    public Dish update(Long id, String dishId, String name, String cuisine, int preparationTime) {
+        return dishRepository.save(new Dish(dishId, name, cuisine, preparationTime, id));
+    }
+
+    @Override
+    public void delete(Long id) {
+        dishRepository.deleteById(id);
+    }
 }

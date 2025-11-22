@@ -37,6 +37,7 @@ public class ChefDetailsServlet extends HttpServlet {
         context.setVariable("izbranChef", this.chefService.findById(chefId));
         context.setVariable("listdishes", this.dishService.listDishes());
         templateEngine.process("chefDetails.html", context, resp.getWriter());
+
     }
 
     @Override

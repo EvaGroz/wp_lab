@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Dish</h1>
+<div>
+    <div th:if="${flag}==0">
+        <h2>Add dish</h2>
+        <form th:action="@{/dishes/add}" method="get">
+            <p>Dish ID: </p>
+            <input name="dishId"/>
+            <p>Name of the dish: </p>
+            <input name="name"/>
+            <p>Cusine: </p>
+            <input name="cuisine"/>
+            <p>Preparation time: </p>
+            <input name="preparationTime"/>
+
+            <button type="submit">ADD</button>
+        </form>
+    </div>
+
+    <div th:if="${flag}==1">
+        <h2 th:text="'DishID:' + ${dish.getId()} + ' Name: ' + ${dish.getName()} + ' Cuisine: ' + ${dish.getCuisine()} + ' Preparation time: ' + ${dish.getPreparationTime()}"></h2>
+        <form th:action="@{/dishes/edit/{id}(id=${dish.getId()})}" method="get">
+            <input name="dishId" th:value="${dish.getDishId()}"/>
+            <input name="name" th:value="${dish.getName()}"/>
+            <input name="cuisine" th:value="${dish.getCuisine()}"/>
+            <input name="preparationTime" th:value="${dish.getPreparationTime()}"/>
+
+            <button type="submit">UPDATE</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

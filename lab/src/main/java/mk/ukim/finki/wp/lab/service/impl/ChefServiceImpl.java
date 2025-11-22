@@ -44,7 +44,7 @@ public class ChefServiceImpl implements ChefService {
         // gornoto zakomentirano ne raboti, ako sakam vaka da proveram dali go ima dishot treba vaka
 //        for (Dish d : chef.getDishes()) {
 //            if (d.getDishId().equals(dishId)) {
-//                return chef; // already has it
+//                return chef;
 //            }
 //        }
 

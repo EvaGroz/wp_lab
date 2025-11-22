@@ -10,4 +10,13 @@ public class Dish {
     private String name;
     private String cuisine;
     private int preparationTime;
+    private Long id;
+
+    public Dish(String dishId, String name, String cuisine, int preparationTime) {
+        this.dishId = dishId;
+        this.name = name;
+        this.cuisine = cuisine;
+        this.preparationTime = preparationTime;
+        this.id=(long) (Math.random() * 1000);
+    }
 }
