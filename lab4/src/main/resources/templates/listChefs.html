@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Restaurant Chefs - Welcome to Our Restaurant</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to Our Restaurant</h1>
+</header>
+<main>
+    <h2>Choose a chef:</h2>
+    <a th:href="@{/chefs/chef-form}" sec:authorize="hasRole('ADMIN')">Add Chef</a>
+    <form action="/dishes" method="POST">
+        <!-- Display radio buttons for each chef,
+             the value should be the chef id
+             and the displayed text should be:
+             Name: <firstName> <lastName>, Bio: <bio> -->
+        <th:block th:each="chef : ${chefs}">
+            <a th:href="@{'chefs/chef-form/{id}' (id = ${chef.id})}" sec:authorize="hasRole('ADMIN')">Edit</a>
+            <a th:href="@{'chefs/delete/{id}' (id = ${chef.id})}" sec:authorize="hasRole('ADMIN')">Delete</a>
+            <label>
+                <input type="radio" name="chefId" th:value="${chef.id}"/>
+                Name: <span th:text="${chef.firstName}"></span>
+                <span th:text="${chef.lastName}"></span>,
+                Bio: <span th:text="|${chef.bio} Gender: ${chef.gender}|"></span>
+            </label>
+            <br/>
+        </th:block>
+        <br/>
+        <input type="submit" value="Submit"/>
+    </form>
+</main>
+</body>
+</html>

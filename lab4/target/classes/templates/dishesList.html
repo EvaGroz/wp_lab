@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Add Dish to Chef</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        section {
+            float: left;
+            margin: 0 1.5%;
+            width: 63%;
+        }
+
+        aside {
+            float: right;
+            margin: 0 1.5%;
+            width: 30%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Select the Dish to add to the Chef</h1>
+    <p th:if="${param.error}" class="text-danger" th:text="${param.error}"></p>
+</header>
+<section>
+    <h2>Select dish:</h2>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/dishes/dish-form}">Add new Dish</a>
+    <form action="/chefs/save" method="POST">
+        <!-- Dynamically display radio buttons for each dish -->
+        <th:block th:each="dish : ${dishes}">
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/dishes/dish-form/{id}(id = ${dish.id})}">Edit</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/dishes/delete/{id}(id = ${dish.id})}">Delete</a>
+            <input type="radio" name="dishId" th:value="${dish.id}">
+            <span th:text="${dish.name}"></span> (<span th:text="${dish.cuisine}"></span>)<br/>
+        </th:block>
+        <br/>
+        <span sec:authorize="hasRole('ADMIN')">
+            <input th:if="${chef != null}" type="submit" value="Add dish">
+        </span>
+        <a th:if="${chef == null}" th:href="@{/chefs}">Izberi chef prvo!</a>
+        <input th:if="${chef != null}" type="hidden" name="chefId" th:value="${chef.id}">
+    </form>
+</section>
+<aside th:if="${chef != null}">
+    <table>
+        <tr>
+            <td><b>Chef ID</b></td>
+            <td th:text="${chef.id}"></td>
+        </tr>
+        <tr>
+            <td><b>Chef Name</b></td>
+            <td th:text="${chef.firstName + ' ' + chef.lastName}"></td>
+        </tr>
+    </table>
+</aside>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dish Form</title>
+</head>
+<body>
+
+<h1 th:text="${chef != null} ? 'Edit Chef' : 'Add New Chef'"></h1>
+
+<!-- ====================== EDIT FORM ====================== -->
+
+<form th:if="${chef != null}"
+      th:action="@{/chefs/edit/{id}(id=${chef.id})}"
+      method="post">
+
+  <input type="hidden" th:value="${chef.id}" name="chefId">
+
+  <div>
+    <label for="name">First Name:</label>
+    <input id="name"
+           type="text"
+           name="firstName"
+           required
+           th:value="${chef.firstName}"/>
+  </div>
+
+  <div>
+    <label for="lastname">Last Name:</label>
+    <input id="lastname"
+           type="text"
+           name="lastName"
+           required
+           th:value="${chef.lastName}"/>
+  </div>
+
+  <div>
+    <label for="bio">Bio:</label>
+    <input id="bio"
+           type="text"
+           name="bio"
+           required
+           th:value="${chef.bio}"/>
+  </div>
+
+  <div>
+    <label for="gender">Gender:</label>
+    <select name="gender" id="gender">
+      <option th:each="g : ${genders}" th:value="${g}" th:text="${g}" th:selected="${chef.gender == g}">
+      </option>
+    </select>
+  </div>
+
+  <button type="submit">Save Changes</button>
+</form>
+
+
+<!-- ====================== ADD FORM ====================== -->
+
+<form th:if="${chef == null}"
+      th:action="@{/chefs/add}"
+      method="post">
+
+  <div>
+    <label for="name1">First Name:</label>
+    <input id="name1"
+           type="text"
+           name="firstName"
+           required/>
+  </div>
+
+  <div>
+    <label for="lastname1">Last Name:</label>
+    <input id="lastname1"
+           type="text"
+           name="lastName"
+           required/>
+  </div>
+
+  <div>
+    <label for="bio1">Bio:</label>
+    <input id="bio1"
+           type="text"
+           name="bio"
+           required/>
+  </div>
+
+  <div>
+    <label for="gender1">Gender:</label>
+    <select name="gender" id="gender1">
+      <option th:each="g : ${genders}" th:value="${g}" th:text="${g}">
+      </option>
+    </select>
+  </div>
+
+  <button type="submit">Add Dish</button>
+</form>
+
+</body>
+</html>
