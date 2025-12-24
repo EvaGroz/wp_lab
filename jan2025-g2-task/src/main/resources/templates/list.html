@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>National Park List</title>
+</head>
+<body>
+
+<div>
+    <form id="filter-form" method="GET" action="/national-parks">
+        <label for="name">National Park Name</label>
+        <input id="name" type="text" name="name" th:value="${name}"/>
+
+        <label for="areaSize">National Park Area Size (in square meters)</label>
+        <input id="areaSize" type="number" name="areaSize" th:value="${areaSize}"/>
+
+        <label for="rating">Rating</label>
+        <input id="rating" type="number" step="0.1" min="0" max="10" name="rating" th:value="${rating}"/>
+
+        <label for="parkType">National Park Type</label>
+        <select id="parkType" name="parkType">
+            <option value="">All</option>
+            <option th:each="type : ${parkTypes}"
+                    th:value="${type.name()}"
+                    th:text="${type.name()}"
+                    th:selected="${type == parkType}">Type</option>
+        </select>
+
+        <label for="location">Park Location</label>
+        <select id="location" name="locationId">
+            <option value="">All</option>
+            <option th:each="loc : ${parkLocations}"
+                    th:value="${loc.id}"
+                    th:text="|${loc.country}, ${loc.continent}|"
+                    th:selected="${loc.id == locationId}">Location</option>
+        </select>
+
+        <button id="filter" type="submit">Filter</button>
+    </form>
+
+    <div>
+        <a class="add-item" th:href="@{/national-parks/add}"
+           sec:authorize="hasRole('ADMIN')"
+        >Add new national park</a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>National Park</th>
+            <th>Area Size</th>
+            <th>Rating</th>
+            <th>National Park Type</th>
+            <th>ParkLocation</th>
+            <th>Open/Closed</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="park : ${page.content}" class="item">
+            <td th:text="${park.name}">[park.name]</td>
+            <td th:text="${park.areaSize}">[park.areaSize]</td>
+            <td th:text="${park.rating}">[park.rating]</td>
+            <td th:text="${park.parkType}">[park.parkType]</td>
+            <td th:text="|${park.location.country}, ${park.location.continent}|">[location]</td>
+            <td th:text="${park.closed ? 'CLOSED' : 'OPEN'}">STATUS</td>
+            <td>
+                <a class="edit-item" th:href="@{'/national-parks/edit/{id}' (id=${park.id})}"
+                   sec:authorize="hasRole('ADMIN')">Edit</a>
+
+                <form th:action="@{'/national-parks/delete/{id}' (id=${park.id})}" th:method="POST" style="display:inline;"
+                      sec:authorize="hasRole('ADMIN')">
+                    <button type="submit" class="delete-item">Delete</button>
+                </form>
+
+                <form th:if="${!park.closed}" th:action="@{'/national-parks/close/{id}' (id=${park.id})}" th:method="POST" style="display:inline;"
+                      sec:authorize="hasRole('ADMIN')">
+                    <button type="submit" class="close-item">Close</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <title>national park List</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div>-->
+<!--    &lt;!&ndash; The form below should invoke the method NationalParkController.listAll &ndash;&gt;-->
+<!--    <form id="filter-form">-->
+<!--        <label for="name">National Park Name</label>-->
+<!--        <input id="name" type="text" name=""/>-->
+
+<!--        <label for="areaSize">National Park Area Size (in square meters)</label>-->
+<!--        <input id="areaSize" type="number" name=""/>-->
+
+<!--        <label for="rating">Rating</label>-->
+<!--        <input id="rating" type="number" step="0.1" min="0" max="10" name=""/>-->
+
+<!--        <label for="parkType">National Park Type</label>-->
+<!--        <select id="parkType" name="">-->
+<!--            <option value="">All</option>-->
+<!--            &lt;!&ndash; For each ParkType you should have one <option> like below  &ndash;&gt;-->
+<!--            <option>[parkType]</option>-->
+<!--        </select>-->
+
+<!--        <label for="location">ParkLocation</label>-->
+<!--        <select id="location" name="">-->
+<!--            <option value="">All</option>-->
+<!--            &lt;!&ndash; For each location you should have one <option> like below  &ndash;&gt;-->
+<!--            <option>[location.country], [location.continent]</option>-->
+<!--        </select>-->
+
+<!--        <button id="filter" type="submit">Filter</button>-->
+<!--    </form>-->
+
+<!--    <div>-->
+<!--        &lt;!&ndash; NationalParkController.showAdd &ndash;&gt;-->
+<!--        <a class="add-item">Add new national park</a>-->
+<!--    </div>-->
+
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <th>National Park</th>-->
+<!--            <th>Area Size</th>-->
+<!--            <th>Rating</th>-->
+<!--            <th>National Park Type</th>-->
+<!--            <th>ParkLocation</th>-->
+<!--            <th>Open/Closed</th>-->
+<!--            <th>Actions</th>-->
+<!--        </tr>-->
+<!--        &lt;!&ndash; For each national park you should have one <tr> like below &ndash;&gt;-->
+<!--        <tr class="item">-->
+<!--            <td>[park.name]</td>-->
+<!--            <td>[park.areaSize]</td>-->
+<!--            <td>[park.rating]</td>-->
+<!--            <td>[park.parkType]</td>-->
+<!--            <td>[park.location.country], [park.location.continent]</td>-->
+<!--            <td>[park.closed] -> OPEN/CLOSED</td>-->
+<!--            <td>-->
+<!--                &lt;!&ndash; NationalParkController.edit &ndash;&gt;-->
+<!--                <a class="edit-item">Edit</a>-->
+
+<!--                &lt;!&ndash; NationalParkController.delete &ndash;&gt;-->
+<!--                <form>-->
+<!--                    <button type="submit" class="delete-item">Delete</button>-->
+<!--                </form>-->
+
+<!--                &lt;!&ndash; NationalParkController.close &ndash;&gt;-->
+<!--                <form>-->
+<!--                    <button type="submit" class="close-item">Close</button>-->
+<!--                </form>-->
+
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--</div>-->
+
+<!--<div>-->
+<!--    <ul id="nav">-->
+<!--        <li><a href="/">Home</a></li>-->
+<!--        <li><a href="/login">Login</a></li>-->
+<!--        <li><a href="/logout">Logout</a></li>-->
+<!--    </ul>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
